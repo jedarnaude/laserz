@@ -1,0 +1,172 @@
+{
+	"project": {
+		"vr": false
+	},
+	"camera": {
+		"metadata": {
+			"version": 4.3,
+			"type": "Object",
+			"generator": "ObjectExporter"
+		},
+		"object": {
+			"uuid": "E6DE1252-6476-4179-AD8C-27859BB9E052",
+			"type": "PerspectiveCamera",
+			"name": "Camera",
+			"fov": 50,
+			"aspect": 1.795031055900621,
+			"near": 1,
+			"far": 100000,
+			"matrix": [0.9917636513710022,-1.0630308855397175e-9,-0.1280813217163086,0,0.045813679695129395,0.9338395595550537,0.3547460436820984,0,0.11960740387439728,-0.3576921224594116,0.9261481761932373,0,-110.07523345947266,-498.4462890625,1797.8385009765625,1]
+		}
+	},
+	"scene": {
+		"metadata": {
+			"version": 4.3,
+			"type": "Object",
+			"generator": "ObjectExporter"
+		},
+		"geometries": [
+			{
+				"uuid": "B9A987D4-4E2C-4E91-9B23-B4854E5D0E56",
+				"type": "BoxGeometry",
+				"width": 1,
+				"height": 1,
+				"depth": 1,
+				"widthSegments": 1,
+				"heightSegments": 1,
+				"depthSegments": 1
+			},
+			{
+				"uuid": "8E4208E1-5760-461C-A16D-639FB18E4E55",
+				"type": "SphereGeometry",
+				"radius": 75,
+				"widthSegments": 6,
+				"heightSegments": 6,
+				"phiStart": 0,
+				"phiLength": 6.28,
+				"thetaStart": 0,
+				"thetaLength": 3.14
+			},
+			{
+				"uuid": "124206D1-5409-487C-8923-892037257C40",
+				"type": "BoxGeometry",
+				"width": 5000,
+				"height": 10,
+				"depth": 10,
+				"widthSegments": 1,
+				"heightSegments": 1,
+				"depthSegments": 1
+			},
+			{
+				"uuid": "DB85B9C6-DF0C-4E6E-B8E5-F25909B78185",
+				"type": "SphereGeometry",
+				"radius": 75,
+				"widthSegments": 6,
+				"heightSegments": 6,
+				"phiStart": 0,
+				"phiLength": 6.28,
+				"thetaStart": 0,
+				"thetaLength": 3.14
+			}],
+		"materials": [
+			{
+				"uuid": "472AC568-C393-4A24-891A-47F28A4517D7",
+				"type": "MeshLambertMaterial",
+				"color": 10206165,
+				"emissive": 0
+			},
+			{
+				"uuid": "E04EBFBD-9B29-497B-A37C-0DF01A571458",
+				"type": "MeshPhongMaterial",
+				"color": 16777215,
+				"emissive": 0,
+				"specular": 1118481,
+				"shininess": 30
+			},
+			{
+				"uuid": "497DA8D9-5354-45C2-B3E6-6DBFBBC35B75",
+				"type": "MeshPhongMaterial",
+				"color": 16711808,
+				"emissive": 0,
+				"specular": 1118481,
+				"shininess": 30
+			},
+			{
+				"uuid": "9C1B6015-E2C2-40DD-97D3-4900F6F19D9A",
+				"type": "MeshPhongMaterial",
+				"color": 16711680,
+				"emissive": 0,
+				"specular": 1118481,
+				"shininess": 30
+			}],
+		"object": {
+			"uuid": "7259A618-6621-4FE9-89EB-39C214322D3F",
+			"type": "Scene",
+			"name": "Scene",
+			"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+			"children": [
+				{
+					"uuid": "543C1706-873A-4960-8290-149CC72CE736",
+					"type": "Mesh",
+					"name": "ground",
+					"geometry": "B9A987D4-4E2C-4E91-9B23-B4854E5D0E56",
+					"material": "472AC568-C393-4A24-891A-47F28A4517D7",
+					"matrix": [1000,0,0,0,0,1000,0,0,0,0,1,0,0,0,0,1]
+				},
+				{
+					"uuid": "A72E27F3-E3B9-45C3-A6E4-54F3F00EA26D",
+					"type": "Mesh",
+					"name": "sphere",
+					"geometry": "8E4208E1-5760-461C-A16D-639FB18E4E55",
+					"material": "E04EBFBD-9B29-497B-A37C-0DF01A571458",
+					"matrix": [0.20000000298023224,0,0,0,0,0.20000000298023224,0,0,0,0,0.20000000298023224,0,-808.9790649414062,740.7738647460938,1,1]
+				},
+				{
+					"uuid": "57BE439B-11EA-49D3-942C-B9D9E4A041E5",
+					"type": "Mesh",
+					"name": "laser",
+					"geometry": "124206D1-5409-487C-8923-892037257C40",
+					"material": "497DA8D9-5354-45C2-B3E6-6DBFBBC35B75",
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-730.6439208984375,645.7640380859375,0,1]
+				},
+				{
+					"uuid": "12947AC7-E26C-4FCF-B9C0-CDAC1CA1D887",
+					"type": "Mesh",
+					"name": "mine",
+					"geometry": "DB85B9C6-DF0C-4E6E-B8E5-F25909B78185",
+					"material": "9C1B6015-E2C2-40DD-97D3-4900F6F19D9A",
+					"matrix": [0.20000000298023224,0,0,0,0,0.20000000298023224,0,0,0,0,0.20000000298023224,0,-706.2164306640625,745.9483032226562,1,1]
+				},
+				{
+					"uuid": "0D0D4322-C4EB-4BE8-86D5-3F7B9374A97D",
+					"type": "DirectionalLight",
+					"name": "DirectionalLight 1",
+					"color": 16777215,
+					"intensity": 1,
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,232.1946563720703,164.02597045898438,738.0962524414062,1]
+				},
+				{
+					"uuid": "5EF44A22-9FFD-469E-A2BE-FCCF5097AFD5",
+					"type": "PerspectiveCamera",
+					"name": "PerspectiveCamera 1",
+					"fov": 50,
+					"aspect": 1,
+					"near": 1,
+					"far": 10000,
+					"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,1078.67626953125,1]
+				}]
+		}
+	},
+	"scripts": {
+		"7259A618-6621-4FE9-89EB-39C214322D3F": [
+			{
+				"name": "Game",
+				"source": "console.log(\"------------------------------------\")\nconsole.log(\"Multiplayer game\")\nconsole.log(\"------------------------------------\")\n\nfunction color(r, g, b, a) {\n  return new THREE.Color(r, g, b)\n}\n\nfunction vec2(x, y) {\n  return new THREE.Vector2(x, y)\n}\n\nfunction vec3(x, y, z) {\n  return new THREE.Vector3(x, y, z)\n}\n\nfunction logVec2(v) {\n  return \"vec2(\" + v.x + \",\" + v.y + \")\"\n}\n\nfunction logVec3(v) {\n  return \"vec3(\" + v.x + \",\" + v.y + \",\" + v.z + \")\"\n}\n\nfunction logColor(v) {\n  return \"color(\" + v.r + \",\" + v.g + \",\" + v.b + \")\"\n}\n\nconsole.log(\"------------------------------------\")\nconsole.log(\"Init vars\")\nconsole.log(\"------------------------------------\")\n\nvar PI = 3.14159265359\nvar PI_2 = 2 * 3.14159265359\nvar SCR_X = 500 // screen horizonta margin (limits and warping)\nvar SCR_Y = 500 // screen vertical margin\nvar Z_POS = 1 // height pos in world (closer to background)\nvar FLASH_SPEED = 10 // flash speed (per second)\nvar PLAYER_SCALE = 0.16 // player scale\nvar PLAYER_SCALE_MINE = 0.23 // player scale with mine\nvar PLAYER_SPEED = 500 // player speed\nvar PLAYER_SPEED_MINE = 300 // player speed with mine (fat ass)\nvar PLAYER_DIE_LEN = 0.2 // player die len (scale + flash)\nvar PLAYER_MINE_LEN = 0.2 // player pick mine len (scale + flash)\nvar PLAYER_LASER_LEN = 0.2 // player drop laser len (scale + flash)\nvar DIST_MINE = 20 // distance from mine to pick\nvar DIST_MINE_SQ = DIST_MINE * DIST_MINE\nvar DIST_LINE = 15 // distance from line to die\nvar TRANS_TIME = 1.0 // invincible time\nvar MINE_SPAWN_LEN = 0.3 // mines spawn len (flash, scale and no pick)\nvar MINE_DIE_LEN = 0.25 // mines die len (flash and disappear)\nvar MINE_SCALE = 0.15 // mines scale\nvar TIME_MINES = 7 // time between new mines\nvar LASER_SCALE = 0.5 // laser scale\nvar LASER_SPAWN_LEN = 0.6 // lasers spawn len (flash and no damaging)\nvar LASER_DIE_LEN = 0.25 // lasers die len (flash and no damaging)\nvar MINE_PROXIMITY_DIST = 10 // minimum distance to any player for any placed mines\nvar MINE_PROXIMITY_DIST_SQ = MINE_PROXIMITY_DIST * MINE_PROXIMITY_DIST\n\n// colors\nvar GLOW = 1\nvar NOGLOW = 0.5\nvar COLORS_RAY = [color(NOGLOW, NOGLOW, GLOW, GLOW), color(GLOW, NOGLOW, NOGLOW, GLOW), color(NOGLOW, GLOW, NOGLOW, GLOW), color(GLOW, NOGLOW, GLOW, GLOW)]\nvar GLOW = 0.8\nvar NOGLOW = 0.3\nvar COLORS_PLAYER = [color(NOGLOW, NOGLOW, GLOW, GLOW), color(GLOW, NOGLOW, NOGLOW, GLOW), color(NOGLOW, GLOW, NOGLOW, GLOW), color(GLOW, NOGLOW, GLOW, GLOW)]\nvar GLOW = 0.8\nvar NOGLOW = 0.3\nvar COLORS_PLAYER_MINE = [color(NOGLOW, NOGLOW, GLOW, GLOW), color(GLOW, NOGLOW, NOGLOW, GLOW), color(NOGLOW, GLOW, NOGLOW, GLOW), color(GLOW, NOGLOW, GLOW, GLOW)]\nvar GLOW = 1.0\nvar NOGLOW = 1.0\nvar COLORS_PLAYER_TRANS = [color(NOGLOW, NOGLOW, GLOW, GLOW), color(GLOW, NOGLOW, NOGLOW, GLOW), color(NOGLOW, GLOW, NOGLOW, GLOW), color(GLOW, NOGLOW, GLOW, GLOW)]\nvar COLOR_MINE = color(0.1, 0.1, 0.1, 1.0)\nvar COLOR_FLASH = color(1, 1, 1, 1)\nvar COLOR_DIE = color(1, 0, 0, 1)\n\n// game vars\nvar time = 0\nvar time_add_mine = 0\nvar game_over = true\nvar game_players = 0\nvar scene = this\n\nconsole.log(\"------------------------------------\")\nconsole.log(\"Init functions \")\nconsole.log(\"------------------------------------\")\n\n\n//-----------------------------------------\n// helpers\n//-----------------------------------------\nfunction time01(t, ini, len) {\n  var d = (t - ini) / len\n  if (d > 1)\n    d = 1\n  return d\n}\n\nfunction to010(t) {\n  var d = t * 2\n  if (d < 1)\n    return d\n  return 2 - d\n}\n\nfunction lerp(a, b, t) {\n  return (b - a) * t + a\n}\n\nfunction lerpColor(a, b, t) {\n  return color(lerp(a.r, b.r, t), lerp(a.g, b.g, t), lerp(a.b, b.b, t), 1)\n}\n\nfunction rotate(x, y, angle) {\n  var s = Math.sin(angle)\n  var c = Math.cos(angle)\n  return vec2(x * c - y * s, x * s + y * c)\n}\n\nfunction nsin(t) {\n  return Math.sin(t * PI_2) * 0.5 + 0.5\n}\n\nfunction flash(t) {\n  return (Math.sin(t * PI_2 * FLASH_SPEED) > 0)\n}\n\nfunction distPointLine(px, py, x1, y1, x2, y2) {\n  var A = px - x1\n  var B = py - y1\n  var C = x2 - x1\n  var D = y2 - y1\n  return Math.abs(A * D - C * B) / Math.sqrt(C * C + D * D)\n}\n\nfunction distsq(a, b) {\n  var x = a.x - b.x\n  var y = a.y - b.y\n  return x * x + y * y\n}\n\nfunction random(min, max) {\n  return Math.random() * (max - min) + min\n}\n\nfunction deleteDead(t, f) {\n  var i = t.length\n  while (i--) {\n    if (t[i].dead) {\n      f(t[i])\n      t.splice(i, 1)\n    }\n  }\n}\n\nfunction deleteAll(t, f) {\n  var i = t.length\n  while (i--) {\n    f(t[i])\n    t.splice(i, 1)\n  }\n}\n\nfunction spawnObject(object_name) {\n  console.log(\"Spawn object: \" + object_name)\n  var obj = scene.getObjectByName(object_name).clone()\n  var new_object = {}\n  scene.add(obj)\n  new_object.obj = obj\n  new_object.obj.material = new_object.obj.material.clone();\n  return new_object\n}\n\nfunction getPosition(object) {\n  return object.obj.position\n}\n\nfunction setPosition(object, pos) {\n  //console.log(\"SetPosition: \" + logVec3(pos))\n  object.obj.position.set(pos.x, pos.y, pos.z)\n}\n\nfunction setRotation(object, rot) {\n  //console.log(\"SetPosition: \" + logVec3(pos))\n  object.obj.rotation.set(rot.x, rot.y, rot.z)\n}\n\nfunction setScale(object, scale) {\n  //console.log(\"SetScale: \" + scale)\n  object.obj.scale.set(scale, scale, scale)\n}\n\nfunction setColor(object, color) {\n  //console.log(\"SetColor: \" + logColor(color))\n  object.obj.material.color = color\n}\n\nfunction setVisible(object, visible) {\n  object.obj.visible = visible\n}\n\n\n//-----------------------------------------\n// players\n//-----------------------------------------\nconsole.log(\"Init Players\");\nvar players = []\nfor (var i = 0; i < 4; i++) {\n  var player = spawnObject(\"sphere\")\n  setVisible(player, false)\n  setScale(player, PLAYER_SCALE)\n  setColor(player, COLORS_PLAYER[i])\n  players.push(player)\n}\n\n\n//-----------------------------------------\n// lasers\n//-----------------------------------------\nconsole.log(\"Init Lasers\");\nvar lasers = [];\nfunction createLaser(pos, owner, direction) {\n  var laser = spawnObject(\"laser\");\n  setColor(laser, COLORS_RAY[owner]);\n  setPosition(laser, pos);\n  setScale(laser, LASER_SCALE);\n  // game vars\n  laser.owner = owner;\n  laser.direction = direction;\n  laser.angle = random(0, PI_2);\n  laser.speed = 1.0 / random(25.0, 40.0);\n  laser.line = {\n    x1: pos.x,\n    y1: pos.y,\n    x2: 0,\n    y2: 0\n  };\n  laser.spawn = true;\n  laser.time_spawn = time;\n  laser.alive = false;\n  laser.dead = false;\n  laser.die = false;\n  lasers.push(laser);\n}\n\n\n//-----------------------------------------\n// mines\n//-----------------------------------------\nconsole.log(\"Init Mines\");\nvar mines = [];\n\nfunction createMine() {\n  for (var j = 0; j < 5; j++) {\n    var ok = true;\n    var pos = vec3(random(-SCR_X * 0.8, SCR_X * 0.8), random(-SCR_Y * 0.8, SCR_Y * 0.8), Z_POS);\n    for (i = 0; i < 4; i++) {\n      var player = players[i];\n      if (player.alive) {\n        var dist = distsq(getPosition(player), pos);\n        if (dist < MINE_PROXIMITY_DIST_SQ)\n          ok = false;\n      }\n    }\n    // added?\n    if (ok) {\n      var mine = spawnObject(\"mine\");\n      setColor(mine, COLOR_MINE);\n      setScale(mine, MINE_SCALE);\n      setPosition(mine, pos);\n      mine.spawn = true;\n      mine.time_spawn = time;\n      mine.alive = false;\n      mine.die = false;\n      mine.dead = false;\n      mines.push(mine);\n  \t  console.log(\"New mine (\" + mines.length + \") \" + logVec3(pos))\t\t\n      return;\n    }\n  }\n}\n\n\n//-----------------------------------------\n// game\n//-----------------------------------------\nfunction gameStart() {\n  console.log(\">>> Start new game\");\n\n  // delete previous mines/lasers\n  deleteAll(lasers, function(laser) {\n    scene.remove(laser.obj);\n  });\n  // delete dead mines\n  deleteAll(mines, function(mine) {\n    console.log(\"Remove mine\");\n    scene.remove(mine.obj);\n  });\n  // create players    \n  game_players = 0;\n  for (var i = 0; i < 4; i++) {\n    var enabled = (i<2);\n    var player = players[i];\n    setVisible(player, enabled);\n    setScale(player, PLAYER_SCALE);\n    setColor(player, COLORS_PLAYER[i]);\n    player.enabled = enabled;\n    player.alive = player.enabled;\n    player.dead = false;\n    player.die = false;\n    player.time_die = 0;\n    player.mine = true;\n    player.time_mine = 0;\n    player.laser = false;\n    player.time_laser = 0;\n    player.num_lasers = 0;\n    player.transparent = false;\n    player.speed = vec2(0,0);\n    player.action = false;\n    if (player.enabled)\n      game_players++;\n  }\n  var x = SCR_X * 0.5\n  var y = SCR_Y * 0.5\n  setPosition(players[0], vec3(-x,-y, Z_POS));\n  setPosition(players[1], vec3(-x, y, Z_POS));\n  setPosition(players[2], vec3( x,-y, Z_POS));\n  setPosition(players[3], vec3( x, y, Z_POS));\n\n  // add some initial random mines\n  for (var i = 0; i < game_players; i++) {\n    createMine();\n  }\n  game_over = false;\n  time_add_mine = time;\n  console.log(\"Num players: \" + game_players);\n}\n\n\n//-----------------------------------------\n// gameRunCollisions\n//-----------------------------------------\nfunction gameRunCollisions() {\n\n  // for each alive player\n  for (var i = 0; i < game_players; i++) {\n    var player = players[i];\n    if (!player.alive)\n      continue;\n    var pos = getPosition(player);\n\n    // if player has no mine, check against all alive mines\n    if (!player.mine && !player.transparent) {\n      for (var j = 0; j < mines.length; j++) {\n        if (mines[j].alive) {\n          var dist = distsq(getPosition(player), getPosition(mines[j]));\n          //console.log(\"Player \" + i + \" dist to mine \" + dist);\n          if (dist < DIST_MINE_SQ) {\n            console.log(\"Player \" + i + \" got mine\");\n            player.mine = true;\n            player.time_mine = time;\n            mines[j].alive = false;\n            mines[j].dead = false;\n            mines[j].die = true;\n            mines[j].time_die = time;\n            break;\n          }\n        }\n      }\n    }\n\n    // if player is not transparent, check against all alive lasers\n    if (!player.transparent) {\n      for (var j = 0; j < lasers.length; j++) {\n        if (lasers[j].alive) {\n          var line = lasers[j].line;\n          var dist = distPointLine(pos.x, pos.y, line.x1, line.y1, line.x2, line.y2);\n          // if close and different owner, die!\n          if (lasers[j].owner != i) {\n            //console.log(\"Dist \" + lasers[j].owner + \", \" + i + \", \" + dist);\n            if (dist < DIST_LINE && false) {\n              console.log(\"Player DEAD!!! \" + i);\n              player.alive = false;\n              player.dead = false;\n              player.die = true;\n              player.time_die = time;\n              game_players = game_players - 1;\n              if (game_players == 1) {\n                console.log(\"Game over!\");\n                game_over = true;\n              }\n              break;\n            }\n          }\n        }\n      }\n    }\n\n  }\n}\n\n\n//-----------------------------------------\n// gamerun\n//-----------------------------------------\nfunction gameRun(delta) {\n\n  // drop mines\n  if (!game_over) {\n    if (time - time_add_mine > TIME_MINES) {\n      time_add_mine = time;\n      createMine();\n    }\n  }\n\n\tvar test = false;\n  // update players\n  for (var i = 0; i < game_players; i++) {\n    var player = players[i];\n    // die bicho\n    if (player.die) {\n      // flash\n      var t = time01(time, player.time_die, PLAYER_MINE_LEN);\n      if (t < 1) {\n        setVisible(player, flash(time));\n        setColor(player, COLOR_DIE);\n      } else {\n        setVisible(player, visible);\n        player.alive = false;\n      }\n    }\n\n    // do alive stuff\n    if (player.alive) {\n      var pos = getPosition(player);\n      // flash\n      if (player.transparent)\n        setVisible(player, flash(time));\n      else\n        setVisible(player, true);\n      // mine\n      if (player.mine) {\n        // flash\n        var t = time01(time, player.time_mine, PLAYER_MINE_LEN);\n        var f = to010(t);\n        setScale(player, lerp(PLAYER_SCALE, PLAYER_SCALE_MINE, t));\n        setColor(player, lerpColor(COLORS_PLAYER_MINE[i], COLOR_FLASH, f));\n        // update pos\n        pos.x = pos.x + player.speed.x * delta * PLAYER_SPEED_MINE\n        pos.y = pos.y + player.speed.y * delta * PLAYER_SPEED_MINE\n      } else {\n        // flash\n        var t = time01(time, player.time_laser, PLAYER_LASER_LEN);\n        var f = to010(t);\n        setScale(player, lerp(PLAYER_SCALE_MINE, PLAYER_SCALE, t));\n        setColor(player, lerpColor(COLORS_PLAYER[i], COLOR_FLASH, f));\n        // update pos\n        pos.x = pos.x + player.speed.x * delta * PLAYER_SPEED\n        pos.y = pos.y + player.speed.y * delta * PLAYER_SPEED\n      }\n      // warp ?\n      if (pos.x < -SCR_X) pos.x = SCR_X;\n      if (pos.y < -SCR_Y) pos.y = SCR_Y;\n      if (pos.x > SCR_X) pos.x = -SCR_X;\n      if (pos.y > SCR_Y) pos.y = -SCR_Y;\n      //console.log(\"Player speed: \" + logVec2(player.speed) + \" delta \" + delta + \" Speed = \" + PLAYER_SPEED_MINE)\n      setPosition(player, pos)\n      // actions\n      if (player.transparent) {\n        // transparent ignore actions\n        var t = time - player.time_transparent;\n        if (t > TRANS_TIME) {\n          setColor(player, COLORS_PLAYER[i]);\n          player.transparent = false;\n          console.log(\"Player \" + i + \" end TRANSPARENT\");\n        }\n      } else {\n        // alive\n        if (!game_over) {\n          var laser_dir = 0\n          if (player.action) {\n            player.action = false;\n            if (player.mine) {\n              // drop laser\n              if (random(0.0,1.0) > 0.5)\n                laser_dir = 1;\n              else\n                laser_dir =-1;        \n              createLaser(pos, i, laser_dir);\n              player.mine = false;\n              player.laser = true;\n              player.time_laser = time;\n              player.num_lasers = player.num_lasers + 1;\n              console.log(\"Player \" + i + \" DROP laser (lasers = \" + player.num_lasers + \")\");\n            } else {\n              // if we have lasers, deactivate one and we become transparent / invincible for a while\n              if (player.num_lasers > 0) {\n                player.num_lasers = player.num_lasers - 1;\n                player.transparent = true;\n                player.time_transparent = time;\n                setColor(player, COLORS_PLAYER_TRANS[i]);\n                console.log(\"Player \" + i + \" set TRANSPARENT (lasers = \" + player.num_lasers + \")\");\n                // update lasers\n                for (var j = 0; j < lasers.length; j++) {\n                  if (lasers[j].alive && lasers[j].owner == i) {\n                    console.log(\"  Removed laser from owner = \" + lasers[j].owner);\n                    lasers[j].alive = false;\n                    lasers[j].die = true;\n                    lasers[j].time_die = time;\n\t\t\t\t\t  test = true;\n                    break;\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n  // update lasers\n  for (var j = 0; j < lasers.length; j++) {\n    // spawn\n    if (lasers[j].spawn) {\n      var t = time01(time, lasers[j].time_spawn, LASER_SPAWN_LEN);\n      if (t < 1) {\n        setVisible(lasers[j], flash(time));\n        setScale(lasers[j], LASER_SCALE * t);\n        setRotation(lasers[j], vec3(0,0,lasers[j].angle));\n      } else {\n        setVisible(lasers[j], true);\n        setScale(lasers[j], LASER_SCALE);\n        lasers[j].spawn = false;\n        lasers[j].alive = true;\n      }\n    }\n    // alive\n    if (lasers[j].alive) {\n      // Rotate\n      lasers[j].angle = lasers[j].angle + lasers[j].direction * delta * PI_2 * lasers[j].speed;\n      setRotation(lasers[j], vec3(0,0,lasers[j].angle));\n      var p = rotate(1, 0, lasers[j].angle);\n      lasers[j].line.x2 = lasers[j].line.x1 + p.x;\n      lasers[j].line.y2 = lasers[j].line.y1 + p.y;\n    }\n    // die\n    if (lasers[j].die) {\n      // Rotate\n\t  console.log(\"Die laser\")\n      var t = time01(time, lasers[j].time_die, LASER_DIE_LEN);\n      if (t < 1) {\n        setVisible(lasers[j], flash(time));\n        setScale(lasers[j], LASER_SCALE * (1 - t));\n      } else\n        lasers[j].dead = true;\n    }\n  }\n  // delete dead lasers\n  deleteDead(lasers, function(laser) { scene.remove(laser.obj); })\n\n  // update mines\n  for (var j = 0; j < mines.length; j++) {\n    // spawn\n    if (mines[j].spawn) {\n      var t = time01(time, mines[j].time_spawn, MINE_SPAWN_LEN);\n      if (t < 1) {\n        setVisible(mines[j], flash(time));\n        setScale(mines[j], MINE_SCALE * t);\n      } else {\n        setVisible(mines[j], true);\n        mines[j].spawn = false;\n        mines[j].alive = true;\n      }\n    }\n    // die\n    if (mines[j].die) {\n\t  console.log(\"Delete mine (\" + mines.length + \")\")\n      var t = time01(time, mines[j].time_die, MINE_DIE_LEN);\n      if (t < 1) {\n        setColor(mines[j], lerpColor(COLOR_MINE, COLOR_FLASH, t));\n        setScale(mines[j], MINE_SCALE * (1 - t));\n      } else\n        mines[j].dead = true;\n    }\n  }\n  // delete dead mines\n  deleteDead(mines, function(mine) { scene.remove(mine.obj) })\n}\n\n\nfunction keydown( event ) {\n    //console.log(\"Key down \" + event.keyCode)\n    switch (event.keyCode) {\n        case 37: players[0].speed.x =-1; break\n        case 38: players[0].speed.y = 1; break\n        case 39: players[0].speed.x = 1; break\n        case 40: players[0].speed.y =-1; break\n        case 13: players[0].action = true; break\n\n        case 37: players[1].speed.x =-1; break\n        case 38: players[1].speed.y = 1; break\n        case 39: players[1].speed.x = 1; break\n        case 40: players[1].speed.y =-1; break\n        case 32: players[1].action = true; break\n    }\n}\n\nfunction keyup( event ) {\n    //console.log(\"Key up \" + event.keyCode)\n    switch (event.keyCode) {\n        case 37: players[0].speed.x = 0; break\n        case 38: players[0].speed.y = 0; break\n        case 39: players[0].speed.x = 0; break\n        case 40: players[0].speed.y = 0; break\n\n        case 37: players[1].speed.x = 0; break\n        case 38: players[1].speed.y = 0; break\n        case 39: players[1].speed.x = 0; break\n        case 40: players[1].speed.y = 0; break\n    }\n}\n\n\n//-----------------------------------------\n// main loop!\n//-----------------------------------------\nfunction update(event) {\n  var delta = 1.0 / 60.0;\n  time += delta;\n  // game run\n  gameRun(delta);\n  gameRunCollisions();\n  //console.log(\"Player: \" + logVec3(getPosition(players[0])))\n  if (game_over) {\n    //if( input.controllers[1].cross_just_clicked )\n    gameStart();\n  }\n}"
+			}],
+		"5EF44A22-9FFD-469E-A2BE-FCCF5097AFD5": [
+			{
+				"name": "",
+				"source": "player.setCamera(this)"
+			}]
+	}
+}
