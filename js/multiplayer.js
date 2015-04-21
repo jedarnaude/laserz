@@ -1,4 +1,4 @@
-function gameCreate(main_scene) {
+function gameCreate(main_scene, socket) {
 
   //-----------------------------------------
   // game vars
@@ -63,6 +63,25 @@ function gameCreate(main_scene) {
     setScale(player.light, LIGHT_SCALE);
     setColor(player.light, COLORS_PLAYER[i]);
   }
+
+  //-----------------------------------------
+  // Network hacks
+  //-----------------------------------------
+  var player_id;
+  socket.on('player id', function(data) {
+    player_id = data.player_id;
+    console.log("My id is: " + data.player_id);
+  });
+  socket.on('key up', function(data) {
+    players[data.player_id % 2].speed = data.speed;
+    players[data.player_id % 2].action = data.action;
+    console.log("key down");
+  });
+  socket.on('key down', function(data) {
+    players[data.player_id % 2].speed = data.speed;
+    players[data.player_id % 2].action = data.action;
+    console.log("key up");
+  });
 
   //-----------------------------------------
   // lasers
@@ -470,11 +489,11 @@ function gameCreate(main_scene) {
   this.gameKeydown = function( event ) {
       console.log("Key down " + event.keyCode)
       switch (event.original.keyCode) {
-          case 37: players[0].speed.x-= 1; break;
-          case 38: players[0].speed.y+= 1; break;
-          case 39: players[0].speed.x+= 1; break;
-          case 40: players[0].speed.y-= 1; break;
-          case 13: players[0].action = true; break;
+          case 37: players[player_id].speed.x-= 1; break;
+          case 38: players[player_id].speed.y+= 1; break;
+          case 39: players[player_id].speed.x+= 1; break;
+          case 40: players[player_id].speed.y-= 1; break;
+          case 13: players[player_id].action = true; break;
 
           case 65: players[1].speed.x-= 1; break;
           case 87: players[1].speed.y+= 1; break;
@@ -484,21 +503,23 @@ function gameCreate(main_scene) {
 
           case 27: gameStart(); break;
       }
+      socket.emit('key down', { player_id: player_id, speed: players[player_id].speed, action: players[player_id].action });
   }
 
   this.gameKeyup = function( event ) {
       //console.log("Key up " + event.keyCode)
       switch (event.original.keyCode) {
-          case 37: players[0].speed.x+= 1; break;
-          case 38: players[0].speed.y-= 1; break;
-          case 39: players[0].speed.x-= 1; break;
-          case 40: players[0].speed.y+= 1; break;
+          case 37: players[player_id].speed.x+= 1; break;
+          case 38: players[player_id].speed.y-= 1; break;
+          case 39: players[player_id].speed.x-= 1; break;
+          case 40: players[player_id].speed.y+= 1; break;
 
           case 65: players[1].speed.x+= 1; break;
           case 87: players[1].speed.y-= 1; break;
           case 68: players[1].speed.x-= 1; break;
           case 83: players[1].speed.y+= 1; break;
       }
+      socket.emit('key up', { player_id: player_id, speed: players[player_id].speed, action: players[player_id].action });
   }
 
   this.gameUpdate = function( delta ) {

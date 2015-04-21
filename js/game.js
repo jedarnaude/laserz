@@ -33,8 +33,13 @@ ENGINE.Game = {
     var ground = new THREE.Mesh(new THREE.BoxGeometry( 1000,1000,1, 10,10,1 ), new THREE.MeshPhongMaterial( { color: 0xFFFFFF, specular: 0, shininess: 1, shading: THREE.SmoothShading, map: THREE.ImageUtils.loadTexture('assets/background.jpg') } ));
     this.scene.add(ground);
 
+    // network (should be handled here now its just for convinience)
+    socket = io.connect('//localhost:3000');
+    socket.on('error', function() { console.error(arguments) });
+    socket.on('message', function() { console.log(arguments) });
+
     // game
-    this.game = new gameCreate(this.scene);
+    this.game = new gameCreate(this.scene, socket);
   },
 
   resize: function() {
