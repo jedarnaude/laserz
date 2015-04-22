@@ -67,11 +67,18 @@ function gameCreate(main_scene, socket) {
   //-----------------------------------------
   // Network hacks
   //-----------------------------------------
+  // NOTE(jose): This is a horrible copy paste but works for now {
+  var GAME_WAITING = 0;
+  var GAME_INPROGRESS = 1;
+  var GAME_PAUSED = 2;
+  var GAME_RESUME = 3;
+  var GAME_OVER = 4;
+  // }
   var game =
   {
     player_id: 0,
     seed: 0,
-    started: false
+    state: GAME_WAITING
   };
   socket.on('game setup', function(data) {
     game.player_id = data.player_id;
@@ -79,8 +86,22 @@ function gameCreate(main_scene, socket) {
 
     console.log("Player id: " + game.player_id + " || Seed id: " + game.seed);
   });
-  socket.on('game start', function(data) {
-    gameStart();
+  socket.on('game status', function(data) {
+    switch (data.state) {
+    case GAME_INPROGRESS:
+      gameStart();
+    case GAME_WAITING:
+    case GAME_PAUSED:
+    case GAME_RESUME:
+      game.state = data.state;
+      console.log("New game state: " + game.state);
+      break;
+    case GAME_OVER:
+      gameOver();
+      break;
+    default:
+      console.log("Invalid state");
+    }
   });
   socket.on('key up', function(data) {
     players[data.player_id % 2].speed = data.speed;
@@ -233,6 +254,11 @@ function gameCreate(main_scene, socket) {
     console.log("Num players: " + game_players);
   }
 
+  function gameOver() {
+    game_over = true;
+    game.state = GAME_OVER;
+    socket.emit('game over', {});
+  }
 
   //-----------------------------------------
   // gameRunCollisions
@@ -284,7 +310,7 @@ function gameCreate(main_scene, socket) {
                 game_players = game_players - 1;
                 if (game_players == 1) {
                   console.log("Game over!");
-                  game_over = true;
+                  gameOver();
                 }
                 break;
               }
@@ -515,7 +541,11 @@ function gameCreate(main_scene, socket) {
           case 83: players[1].speed.y-= 1; break;
           case 32: players[1].action = true; break;
 
-          case 27: gameStart(); break;
+          case 27:
+            if (game.state == GAME_OVER) {
+              socket.emit('game rematch', {});
+            }
+            break;
       }
       socket.emit('key down', { player_id: game.player_id, speed: players[game.player_id].speed, action: players[game.player_id].action });
   }
@@ -537,7 +567,7 @@ function gameCreate(main_scene, socket) {
   }
 
   this.gameUpdate = function( delta ) {
-    if (!game.started) {
+    if (game.state == GAME_WAITING || game.state == GAME_PAUSED || game.state == GAME_OVER) {
       return;
     }
 
