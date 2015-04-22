@@ -67,10 +67,16 @@ function gameCreate(main_scene, socket) {
   //-----------------------------------------
   // Network hacks
   //-----------------------------------------
-  var player_id;
-  socket.on('player id', function(data) {
-    player_id = data.player_id;
-    console.log("My id is: " + data.player_id);
+  var game =
+  {
+    player_id: 0,
+    seed: 0
+  };
+  socket.on('game setup', function(data) {
+    game.player_id = data.player_id;
+    game.seed = data.seed;
+
+    console.log("Player id: " + game.player_id + " || Seed id: " + game.seed);
   });
   socket.on('key up', function(data) {
     players[data.player_id % 2].speed = data.speed;
@@ -101,8 +107,8 @@ function gameCreate(main_scene, socket) {
     // game vars
     laser.owner = owner;
     laser.direction = direction;
-    laser.angle = random(0, PI_2);
-    laser.speed = 1.0 / random(25.0, 40.0);
+    laser.angle = random(game.seed, 0, PI_2);
+    laser.speed = 1.0 / random(game.seed, 25.0, 40.0);
     laser.line = {
       x1: pos.x,
       y1: pos.y,
@@ -125,7 +131,7 @@ function gameCreate(main_scene, socket) {
     if (mines.length > 5) return;
     for (var j = 0; j < 5; j++) {
       var ok = true;
-      var pos = vec3(random(-SCR_X * 0.8, SCR_X * 0.8), random(-SCR_Y * 0.8, SCR_Y * 0.8), Z_POS);
+      var pos = vec3(random(game.seed, -SCR_X * 0.8, SCR_X * 0.8), random(game.seed, -SCR_Y * 0.8, SCR_Y * 0.8), Z_POS);
       for (i = 0; i < 4; i++) {
         var player = players[i];
         if (player.alive) {
@@ -370,7 +376,7 @@ function gameCreate(main_scene, socket) {
               player.action = false;
               if (player.mine) {
                 // drop laser
-                if (random(0.0,1.0) > 0.5)
+                if (random(game.seed, 0.0,1.0) > 0.5)
                   laser_dir = 1;
                 else
                   laser_dir =-1;        
@@ -489,11 +495,11 @@ function gameCreate(main_scene, socket) {
   this.gameKeydown = function( event ) {
       console.log("Key down " + event.keyCode)
       switch (event.original.keyCode) {
-          case 37: players[player_id].speed.x-= 1; break;
-          case 38: players[player_id].speed.y+= 1; break;
-          case 39: players[player_id].speed.x+= 1; break;
-          case 40: players[player_id].speed.y-= 1; break;
-          case 13: players[player_id].action = true; break;
+          case 37: players[game.player_id].speed.x-= 1; break;
+          case 38: players[game.player_id].speed.y+= 1; break;
+          case 39: players[game.player_id].speed.x+= 1; break;
+          case 40: players[game.player_id].speed.y-= 1; break;
+          case 13: players[game.player_id].action = true; break;
 
           case 65: players[1].speed.x-= 1; break;
           case 87: players[1].speed.y+= 1; break;
@@ -503,23 +509,23 @@ function gameCreate(main_scene, socket) {
 
           case 27: gameStart(); break;
       }
-      socket.emit('key down', { player_id: player_id, speed: players[player_id].speed, action: players[player_id].action });
+      socket.emit('key down', { player_id: game.player_id, speed: players[game.player_id].speed, action: players[game.player_id].action });
   }
 
   this.gameKeyup = function( event ) {
       //console.log("Key up " + event.keyCode)
       switch (event.original.keyCode) {
-          case 37: players[player_id].speed.x+= 1; break;
-          case 38: players[player_id].speed.y-= 1; break;
-          case 39: players[player_id].speed.x-= 1; break;
-          case 40: players[player_id].speed.y+= 1; break;
+          case 37: players[game.player_id].speed.x+= 1; break;
+          case 38: players[game.player_id].speed.y-= 1; break;
+          case 39: players[game.player_id].speed.x-= 1; break;
+          case 40: players[game.player_id].speed.y+= 1; break;
 
           case 65: players[1].speed.x+= 1; break;
           case 87: players[1].speed.y-= 1; break;
           case 68: players[1].speed.x-= 1; break;
           case 83: players[1].speed.y+= 1; break;
       }
-      socket.emit('key up', { player_id: player_id, speed: players[player_id].speed, action: players[player_id].action });
+      socket.emit('key up', { player_id: game.player_id, speed: players[game.player_id].speed, action: players[game.player_id].action });
   }
 
   this.gameUpdate = function( delta ) {

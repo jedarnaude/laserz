@@ -72,8 +72,9 @@ function distsq(a, b) {
   return x * x + y * y
 }
 
-function random(min, max) {
-  return Math.random() * (max - min) + min
+function random(seed, min, max) {
+  var asd = Math.seedrandom(seed);
+  return asd * (max - min) + min
 }
 
 function deleteDead(t, f) {

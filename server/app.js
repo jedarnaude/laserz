@@ -14,10 +14,11 @@ var io = require('socket.io').listen(app);
 // TODO(jose): have a property information sent back and forth
 // TODO(jose): rooms are needed for multiple simultaneous games
 var players = 0;
+var seed = Math.floor((Math.random() * 1000000));
 io.sockets.on('connection', function(socket) {
     console.log("new user");
     socket.join('test room');
-    socket.emit('player id', { player_id: players++ });
+    socket.emit('game setup', { seed: seed.toString(), player_id: players++ });
 
     socket.on('key down', function(data) {
         socket.broadcast.to('test room').emit('key down', data);
