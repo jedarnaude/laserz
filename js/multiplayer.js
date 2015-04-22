@@ -70,13 +70,17 @@ function gameCreate(main_scene, socket) {
   var game =
   {
     player_id: 0,
-    seed: 0
+    seed: 0,
+    started: false
   };
   socket.on('game setup', function(data) {
     game.player_id = data.player_id;
     game.seed = data.seed;
 
     console.log("Player id: " + game.player_id + " || Seed id: " + game.seed);
+  });
+  socket.on('game start', function(data) {
+    gameStart();
   });
   socket.on('key up', function(data) {
     players[data.player_id % 2].speed = data.speed;
@@ -107,8 +111,8 @@ function gameCreate(main_scene, socket) {
     // game vars
     laser.owner = owner;
     laser.direction = direction;
-    laser.angle = random(game.seed, 0, PI_2);
-    laser.speed = 1.0 / random(game.seed, 25.0, 40.0);
+    laser.angle = random(0, PI_2);
+    laser.speed = 1.0 / random(25.0, 40.0);
     laser.line = {
       x1: pos.x,
       y1: pos.y,
@@ -131,7 +135,7 @@ function gameCreate(main_scene, socket) {
     if (mines.length > 5) return;
     for (var j = 0; j < 5; j++) {
       var ok = true;
-      var pos = vec3(random(game.seed, -SCR_X * 0.8, SCR_X * 0.8), random(game.seed, -SCR_Y * 0.8, SCR_Y * 0.8), Z_POS);
+      var pos = vec3(random(-SCR_X * 0.8, SCR_X * 0.8), random(-SCR_Y * 0.8, SCR_Y * 0.8), Z_POS);
       for (i = 0; i < 4; i++) {
         var player = players[i];
         if (player.alive) {
@@ -169,6 +173,9 @@ function gameCreate(main_scene, socket) {
   //-----------------------------------------
   function gameStart() {
     console.log(">>> Start new game");
+
+    // Seeding our random number generator
+    Math.seedrandom(game.seed);
 
     // delete previous mines/lasers
     deleteAll(lasers, function(laser) {
@@ -222,6 +229,7 @@ function gameCreate(main_scene, socket) {
     }
     game_over = false;
     time_add_mine = time;
+    game.started = true;
     console.log("Num players: " + game_players);
   }
 
@@ -376,7 +384,7 @@ function gameCreate(main_scene, socket) {
               player.action = false;
               if (player.mine) {
                 // drop laser
-                if (random(game.seed, 0.0,1.0) > 0.5)
+                if (random(0.0,1.0) > 0.5)
                   laser_dir = 1;
                 else
                   laser_dir =-1;        
@@ -529,14 +537,14 @@ function gameCreate(main_scene, socket) {
   }
 
   this.gameUpdate = function( delta ) {
+    if (!game.started) {
+      return;
+    }
+
     time += delta;
+    
     // game run
     gameRun( delta );
     gameRunCollisions();
-    //console.log("Player: " + logVec3(getPosition(players[0])))
-    if ( game_over ) {
-      //if( input.controllers[1].cross_just_clicked )
-      gameStart();
-    }
   }
 }

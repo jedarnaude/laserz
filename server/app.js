@@ -16,9 +16,13 @@ var io = require('socket.io').listen(app);
 var players = 0;
 var seed = Math.floor((Math.random() * 1000000));
 io.sockets.on('connection', function(socket) {
-    console.log("new user");
+    console.log("new user " + players);
     socket.join('test room');
     socket.emit('game setup', { seed: seed.toString(), player_id: players++ });
+
+    if (players == 2) {
+        io.sockets.emit('game start', {});
+    }
 
     socket.on('key down', function(data) {
         socket.broadcast.to('test room').emit('key down', data);
