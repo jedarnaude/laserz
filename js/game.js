@@ -34,9 +34,11 @@ ENGINE.Game = {
     this.scene.add(ground);
 
     // network (should be handled here now its just for convinience)
-    socket = io.connect('//localhost:3000');
+    socket = io.connect('http://92.60.126.107:3000');
     socket.on('error', function() { console.error(arguments) });
     socket.on('message', function() { console.log(arguments) });
+
+    gamepadSupport.init();
 
     // game
     this.game = new gameCreate(this.scene, socket);
@@ -49,6 +51,13 @@ ENGINE.Game = {
   step: function(dt) {
     // game
     this.game.gameUpdate(dt);
+
+    if (gamepadSupport.gamepads) {
+      for (var i in gamepadSupport.gamepads) {
+        var gamepad = gamepadSupport.gamepads[i];
+      }
+    }
+
   },
 
   render: function() {
