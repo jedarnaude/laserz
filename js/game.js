@@ -38,6 +38,7 @@ ENGINE.Game = {
     socket.on('error', function() { console.error(arguments) });
     socket.on('message', function() { console.log(arguments) });
 
+    // gamepad lib
     gamepadSupport.init();
 
     // game
@@ -50,14 +51,7 @@ ENGINE.Game = {
 
   step: function(dt) {
     // game
-    this.game.gameUpdate(dt);
-
-    if (gamepadSupport.gamepads) {
-      for (var i in gamepadSupport.gamepads) {
-        var gamepad = gamepadSupport.gamepads[i];
-      }
-    }
-
+    this.game.gameUpdate(dt, gamepadSupport.gamepads);
   },
 
   render: function() {
