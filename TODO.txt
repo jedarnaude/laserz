@@ -3,9 +3,9 @@
 
 Started-Testing-Commited
 
+++- [JR] Create a local nodejs server to avoid CORS (usage: 'nodejs site.js', then connect with 'http://localhost:3000/index.html')
 +-- [JR] Use InputManager for game input instead of direct key access
 --- [JR] Add some physics to ball movement (accel/deceleration)
---- [JR] Load all resources from server instead of local to avoid CORS issues
 +-- [JE] Network lobbys
 --- Better game sessions and query states (is game running, is game over, start new game with specified players)
 --- Add queue and spectator mode to network lobbys
