@@ -21,10 +21,39 @@
 		<script src="js/game.js"></script>
 		<script src="js/utils.js"></script>
 		<script src="js/globals.js"></script>
-		<script src="js/inputs.js"></script>
 		<script src="js/multiplayer.js"></script>
 
  		<script src='http://92.60.126.107:3000/socket.io/socket.io.js'></script>
+
+        		<!-- assets -->
+		<script type="x-shader/x-vertex" id="envmap-vs">
+			varying vec3 vEye;
+			varying vec3 vNormal;
+			void main() {
+				vEye = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
+				vNormal = normalize( normalMatrix * normal );
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+
+		<script type="x-shader/x-vertex" id="envmap-fs">
+			uniform sampler2D texEnvmap;
+			uniform vec4 texColor;
+			varying vec3 vEye;
+			varying vec3 vNormal;
+			void main() {
+				vec3 r = reflect( vEye, vNormal );
+				r = vEye - 2. * dot( vNormal, vEye ) * vNormal;
+				float m = 2.0 * sqrt( pow( r.x, 2.0 ) + pow( r.y, 2.0 ) + pow( r.z + 1.0, 2.0 ) );
+				vec2 vN = r.xy / m + 0.5;
+				vec4 base = texture2D( texEnvmap, vN );
+				gl_FragColor = vec4( base.rgb * texColor.rgb, 1.0 );
+			}
+		</script>
+
+		<script>
+			PLAYGROUND.Application.prototype.defaults.paths.base = '/';
+		</script>
 	</body>
 
 </html>
