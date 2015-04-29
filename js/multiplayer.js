@@ -19,19 +19,6 @@ function gameCreate(main_scene, socket) {
   objects["mine_glow"] = new THREE.PlaneBufferGeometry( 75,75 );
 
   function createMaterial(name) {
-    /*
-    var material = new THREE.ShaderMaterial( {
-      uniforms: { 
-        texEnvmap: { type: 't', value: map },
-        texColor: { type: 'v4', value: new THREE.Color(0xFF0030FF) }
-      },
-      vertexShader: document.getElementById('envmap-vs').textContent,
-      fragmentShader: document.getElementById('envmap-fs').textContent,
-      shading: THREE.SmoothShading,
-    } );
-    material.uniforms.texEnvmap.value.wrapS = material.uniforms.texEnvmap.value.wrapT = THREE.ClampToEdgeWrapping;
-    return material;
-    */
     if (name == "sphere_glow") return new THREE.MeshLambertMaterial( { color: 0xFFFFFF, transparent: true, map: sphere_glow, blending: THREE.AdditiveBlending, } );
     if (name == "laser_glow") return new THREE.MeshLambertMaterial( { color: 0xFFFFFF, transparent: true, map: laser_glow, blending: THREE.AdditiveBlending, opacity: 0.5 } );
     if (name == "mine_glow") return new THREE.MeshLambertMaterial( { color: 0xFFFFFF, transparent: true, map: sphere_glow, blending: THREE.AdditiveBlending, } );
@@ -68,50 +55,50 @@ function gameCreate(main_scene, socket) {
   // Network hacks
   //-----------------------------------------
   // NOTE(jose): This is a horrible copy paste but works for now {
+  var GAME_TEST_ROOM = "ROOM_TEST_1"; // default room to join all clients
   var GAME_WAITING = 0;
   var GAME_INPROGRESS = 1;
   var GAME_PAUSED = 2;
   var GAME_RESUME = 3;
   var GAME_OVER = 4;
   // }
-  var game =
-  {
-    player_id: 0,
-    seed: 0,
-    state: GAME_WAITING
-  };
-  socket.on('game setup', function(data) {
-    game.player_id = data.player_id;
-    game.seed = data.seed;
+  var game = { client_id: 0, players: [], state: GAME_WAITING, room_name: 0, room_owner: 0 }
+  function isServer() { return game.room_owner == game.client_id; }
 
-    console.log("Player id: " + game.player_id + " || Seed id: " + game.seed);
+  // receive server join information (own)
+  socket.on('server_join', function(data) {
+    game.client_id = data.client_id;
+    console.log("Server join: client_id=" + game.client_id);
+    // send room join
+    socket.emit("room_join", { room_name: GAME_TEST_ROOM, client_name: "Pepekike", client_id: game.client_id });
   });
-  socket.on('game status', function(data) {
-    switch (data.state) {
-    case GAME_INPROGRESS:
-      gameStart();
-    case GAME_WAITING:
-    case GAME_PAUSED:
-    case GAME_RESUME:
-      game.state = data.state;
-      console.log("New game state: " + game.state);
-      break;
-    case GAME_OVER:
-      gameOver();
-      break;
-    default:
-      console.log("Invalid state");
+
+  // receive room join information (own and others)
+  socket.on('room_join', function(data) {
+    game.room_clients = data.room_clients;
+    game.room_owner = data.room_owner;
+    console.log("Room join: '" + data.room_data.room_name + ", name='" + data.room_data.client_name + "', client=" + data.room_data.client_id + "', owner=" + data.room_owner);
+    console.log("Room clients: " + data.room_clients.length);
+    if (isServer()) {
+      if (data.room_clients.length == 2) {
+        console.log("I am king! start game then (ToDo)");
+        socket.emit("room_message", { action: "game_start", players: [] });        
+      }
     }
   });
-  socket.on('key up', function(data) {
-    players[data.player_id % 2].speed = data.speed;
-    players[data.player_id % 2].action = data.action;
-    console.log("key down");
-  });
-  socket.on('key down', function(data) {
-    players[data.player_id % 2].speed = data.speed;
-    players[data.player_id % 2].action = data.action;
-    console.log("key up");
+
+  // receive room leave information (others)
+  socket.on('room_leave', function(data) {
+    console.log("Room leave: " + data.room_name + ", owner=" + data.room_owner);
+    console.log("@ToDo");
+  });    
+
+  socket.on('room_message', function(data) {
+    switch (data.action) {
+      case "game_start":
+        gameStart();
+        break;
+    }
   });
 
   //-----------------------------------------
@@ -188,15 +175,14 @@ function gameCreate(main_scene, socket) {
     }
   }
 
-
   //-----------------------------------------
   // game
-  //-----------------------------------------
-  function gameStart() {
+  //-----------------------------------------  
+  function gameStart(options) {
     console.log(">>> Start new game");
 
     // Seeding our random number generator
-    Math.seedrandom(game.seed);
+    //Math.seedrandom(options.seed);
 
     // delete previous mines/lasers
     deleteAll(lasers, function(laser) {
@@ -550,7 +536,7 @@ function gameCreate(main_scene, socket) {
       socket.emit('key down', { player_id: game.player_id, speed: players[game.player_id].speed, action: players[game.player_id].action });
   }
 
-  this.gameKeyup = function( event ) {
+  this.gameKeyup = function(event) {
       //console.log("Key up " + event.keyCode)
       switch (event.original.keyCode) {
           case 37: players[game.player_id].speed.x+= 1; break;
@@ -566,7 +552,7 @@ function gameCreate(main_scene, socket) {
       socket.emit('key up', { player_id: game.player_id, speed: players[game.player_id].speed, action: players[game.player_id].action });
   }
 
-  this.gameUpdate = function( delta ) {
+  this.gameUpdate = function(delta) {
     if (game.state == GAME_WAITING || game.state == GAME_PAUSED || game.state == GAME_OVER) {
       return;
     }
@@ -574,7 +560,15 @@ function gameCreate(main_scene, socket) {
     time += delta;
     
     // game run
-    gameRun( delta );
+    gameRun(delta);
     gameRunCollisions();
   }
+
+  //-----------------------------------------
+  // gameState
+  //-----------------------------------------
+  this.gameState = function() {
+    return game.state;
+  }
+
 }

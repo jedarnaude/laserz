@@ -34,7 +34,7 @@ ENGINE.Game = {
     this.scene.add(ground);
 
     // network (should be handled here now its just for convinience)
-    socket = io.connect('http://92.60.126.107:3000');
+    socket = io.connect('http://localhost:3000');
     socket.on('error', function() { console.error(arguments) });
     socket.on('message', function() { console.log(arguments) });
 
