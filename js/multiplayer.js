@@ -66,54 +66,6 @@ function gameCreate(main_scene, socket) {
   // NOTE(jordi): to be replaced with full inputmanager structure
   var game_inputs = { left: false, right: false, up: false, down: false, action: false };
 
-  // NOTE(jordi): move all this room outside {
-  // room data contains all room information
-    var GAME_TEST_ROOM = "ROOM_TEST_1"; // default room to join all clients
-
-    var room_data = { client_id: 0, players: [], state: GAME_WAITING, room_name: 0, room_owner: 0 }
-    function isRoomOwner() { return room_data.room_owner == room_data.client_id; }
-
-    // receive server join information (own)
-    socket.on('server_join', function(data) {
-      room_data.client_id = data.client_id;
-      console.log("Server join: client_id=" + room_data.client_id);
-      // send room join
-      socket.emit("room_join", { room_name: GAME_TEST_ROOM, client_name: "Pepekike", client_id: room_data.client_id });
-    });
-
-    // receive room join information (own and others)
-    socket.on('room_join', function(data) {
-      room_data.room_clients = data.room_clients;
-      room_data.room_owner = data.room_owner;
-      console.log("Room join: '" + data.room_data.room_name + ", name='" + data.room_data.client_name + "', client=" + data.room_data.client_id + "', owner=" + data.room_owner);
-      console.log("Room clients: " + data.room_clients.length);
-      if (isRoomOwner()) {
-        // hardcode
-        if (data.room_clients.length == 2) {
-          var game_players = [ data.room_clients[0], data.room_clients[1] ];
-          console.log("I am king! shall the game start");
-          sendMessage("game_start", { seed: Math.floor((Math.random() * 1000000)), players: game_players })
-        }
-      }
-    });
-
-    // NOTE(jordi): interrupt current game if the client who left was in game, todo
-    socket.on('room_leave', function(data) {
-      console.log("Room leave: " + data.room_name + ", owner=" + data.room_owner);
-    });    
-
-    // forward message to game
-    socket.on('room_message', function(data) {
-      onMessage(data);
-    });
-  // } NOTE
-
-  // send message to room helper
-  function sendMessage(action, data) {
-    data.action = action;
-    socket.emit("room_message", data);
-  }
-
   //-----------------------------------------
   // lasers
   //-----------------------------------------
@@ -525,36 +477,6 @@ function gameCreate(main_scene, socket) {
     deleteDead(mines, function(mine) { scene.remove(mine.obj); scene.remove(mine.light.obj); })
   }
 
-  this.gameKeydown = function( event ) {
-      console.log("Key down " + event.keyCode)
-      switch (event.original.keyCode) {
-          case 37: players[game_playerid].speed.x-= 1; break;
-          case 38: players[game_playerid].speed.y+= 1; break;
-          case 39: players[game_playerid].speed.x+= 1; break;
-          case 40: players[game_playerid].speed.y-= 1; break;
-          case 13: players[game_playerid].action = true; break;
-          case 27:
-            /*
-            if (game.state == GAME_OVER) {
-              socket.emit('game rematch', {});
-            }
-            */
-            break;
-      }
-      //socket.emit('key down', { player_id: game.player_id, speed: players[game.player_id].speed, action: players[game.player_id].action });
-  }
-
-  this.gameKeyup = function(event) {
-      //console.log("Key up " + event.keyCode)
-      switch (event.original.keyCode) {
-          case 37: players[game_playerid].speed.x+= 1; break;
-          case 38: players[game_playerid].speed.y-= 1; break;
-          case 39: players[game_playerid].speed.x-= 1; break;
-          case 40: players[game_playerid].speed.y+= 1; break;
-      }
-      //socket.emit('key up', { player_id: game.player_id, speed: players[game.player_id].speed, action: players[game.player_id].action });
-  }
-
   this.gameSendInputs = function() {
 
   }
@@ -569,10 +491,8 @@ function gameCreate(main_scene, socket) {
     }
   }
 
-  this.gameRun = function(delta) {
-    if (isRoomOwner()) {
-      sendMessage("game_update", { delta: delta, inputs: game_inputs });
-    } 
+  this.gameRunServer = function(delta) {
+    this.sendMessage("game_update", { delta: delta, inputs: game_inputs });
   }
 
   this.gameState = function() {
@@ -582,11 +502,19 @@ function gameCreate(main_scene, socket) {
   //-----------------------------------------
   // gameState
   //-----------------------------------------
-  onMessage = function(data) {
+  this.client_id = 0;
+
+  this.sendMessage = function(action, data) {
+    data.action = action;
+    socket.emit("room_message", data);
+  }
+
+  this.onMessage = function(data) {
     switch (data.action) {
       case "game_start":
         // NOTE(jordi): hardcoded game_playerid for 2 players
-        game_playerid = (data.players[0].client_id == room_data.client_id) ? 0 : 1;
+        game_playerid = (data.players[0].client_id == this.client_id) ? 0 : 1;
+        console.log("GameStart: Player = " + game_playerid);
         gameStart(data);
         break;
     }
