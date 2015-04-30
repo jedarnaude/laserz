@@ -51,7 +51,7 @@ ENGINE.Game = {
 
   step: function(dt) {
     // game
-    this.game.gameUpdate(dt, gamepadSupport.gamepads);
+    this.game.gameRun(dt);
   },
 
   render: function() {

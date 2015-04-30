@@ -47,28 +47,28 @@ io.sockets.on('connection', function(socket) {
         io.to(socket.room_data.room_name).emit('room_message', data);
     });
 
-    function findClientsSocketByRoomId(roomId) {
+    function findSocketsInRoom(room_name) {
         var res = [];
-        var room = io.sockets.adapter.rooms[roomId];
-        if (room) {
-            for (var id in room)
-                res.push(io.sockets.adapter.nsp.connected[id]);
-        }
+        for (var id in io.nsps['/'].adapter.rooms[room_name])
+            res.push(io.sockets.connected[id]);
         return res;
     }
 
     function onRoomJoin(room_data) {
-        if (findClientsSocketByRoomId(room_data.room_name).length < 2)
+        if (findSocketsInRoom(room_data.room_name).length < 2)
         {
             // save room data
             socket.room_data = room_data;
             // add socket to room
             socket.join(socket.room_data.room_name);
             // get connected clients to room and broadcast room join message to all
-            var clients = findClientsSocketByRoomId(socket.room_data.room_name);
+            var clients = findSocketsInRoom(socket.room_data.room_name);
             var room_clients = [];
-            for (var client in clients)
-                room_clients.push(client.room_data);
+            for (var i = 0; i < clients.length; i++)
+            {
+                console.log("Client Room Data: %j", clients[i].room_data);
+                room_clients.push(clients[i].room_data);
+            }
             console.log("Client " + socket.client_id + ": Room join '" + socket.room_data.room_name + "' (clients=" + clients.length + ", owner=" + clients[0].client_id + ")");            
             // room_data: room_data of client that joined room
             // room_clients: list of clients in this room
@@ -83,9 +83,9 @@ io.sockets.on('connection', function(socket) {
         // remove socket from room
         socket.leave(socket.room_data.room_name);
         // get connected clients to room and broadcast room leave message to all
-        if (findClientsSocketByRoomId(socket.room_data.room_name).length > 0)
+        var clients = findSocketsInRoom(socket.room_data.room_name);
+        if (clients.length > 0)
         {
-            var clients = findClientsSocketByRoomId(socket.room_data.room_name);
             var room_clients = [];
             for (var client in clients)
                 room_clients.push(client.room_data);            
