@@ -4,11 +4,11 @@
 Started-Testing-Commited
 
 ++- [JR] Create a local nodejs server to avoid CORS (usage: 'nodejs site.js', then connect with 'http://localhost:3000/index.html')
-+-- [JR] Use InputManager for game input instead of direct key access
+++- [JR] Use InputManager for game input instead of direct key access, also gamepads
 +-- [JE/JR] Network lobbys
---- Parse received players from server, and setup a game with them
---- Extract room join/leave/management from multiplayer.js into game.js, and just multiplayer.js for the game itself
---- Better game sessions and query states (is game running, is game over, start new game with specified players), so from outside we can start/stop/run games
++-- Parse received players from server, and setup a game with them
+++- Extract room join/leave/management from multiplayer.js into game.js, and just multiplayer.js for the game itself
++-- Better game sessions and query states (is game running, is game over, start new game with specified players), so from outside we can start/stop/run games
 --- [JR] Add some physics to ball movement (accel/deceleration)
 --- Graphics pass (background mostly)
 --- Sound pass

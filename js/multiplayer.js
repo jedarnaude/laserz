@@ -477,46 +477,40 @@ function gameCreate(main_scene, socket) {
     deleteDead(mines, function(mine) { scene.remove(mine.obj); scene.remove(mine.light.obj); })
   }
 
-  this.gameSendInputs = function() {
-
-  }
-
-  this.gameUpdate = function(delta) {
+  function gameUpdate(delta,inputs) {
     time += delta;
     if (game_state == GAME_INPROGRESS) {
-      // game run
+      // save input
+      if (inputs[0]) {
+        players[0].speed.x = ((inputs[0].buttons & Buttons.Left)?-1:0) + ((inputs[0].buttons & Buttons.Right)?1:0);
+        players[0].speed.y = ((inputs[0].buttons & Buttons.Up)?0:-1) + ((inputs[0].buttons & Buttons.Down)?0:1);
+        players[0].action = inputs[0].buttons_pressed & Buttons.A;
+      }
+      if (inputs[1]) {
+        players[1].speed.x = ((inputs[1].buttons & Buttons.Left)?-1:0) + ((inputs[1].buttons & Buttons.Right)?1:0);
+        players[1].speed.y = ((inputs[1].buttons & Buttons.Up)?0:-1) + ((inputs[1].buttons & Buttons.Down)?0:1);
+        players[1].action = inputs[1].buttons_pressed & Buttons.A;
+      }
+      // run!
       gameRun(delta);
       gameRunCollisions();
-      gameSendInputs();
     }
-  }
-
-  this.gameRunServer = function(delta) {
-    this.sendMessage("game_update", { delta: delta, inputs: game_inputs });
-  }
-
-  this.gameState = function() {
-    return game_state;
   }
   
   //-----------------------------------------
   // gameState
   //-----------------------------------------
-  this.client_id = 0;
-
-  this.sendMessage = function(action, data) {
-    data.action = action;
-    socket.emit("room_message", data);
-  }
-
-  this.onMessage = function(data) {
+  this.onRoomMessage = function(data) {
     switch (data.action) {
       case "game_start":
         // NOTE(jordi): hardcoded game_playerid for 2 players
-        game_playerid = (data.players[0].client_id == this.client_id) ? 0 : 1;
         console.log("GameStart: Player = " + game_playerid);
         gameStart(data);
         break;
+      case "game_update":
+        // NOTE(jordi): hardcoded game_playerid for 2 players
+        gameUpdate(data.delta, data.inputs);
+        break;        
     }
   }
 }

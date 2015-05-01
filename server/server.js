@@ -44,7 +44,10 @@ io.sockets.on('connection', function(socket) {
 
     // Game in progress
     socket.on('room_message', function(data) {
-        io.to(socket.room_data.room_name).emit('room_message', data);
+        if (data.broadcast)
+            io.to(socket.room_data.room_name).emit('room_message', data);
+        else
+            io.sockets.connected[io.nsps['/'].adapter.rooms[socket.room_data.room_name][0]].emit('room_message', data);
     });
 
     function findSocketsInRoom(room_name) {
