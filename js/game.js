@@ -31,6 +31,7 @@ ENGINE.Game = {
   },
 
   onRoomMessage: function(data) {
+    console.log("OnRoomMessage! %j", data);
     switch (data.action) {
       case "game_inputs":
         // inputs
@@ -38,6 +39,7 @@ ENGINE.Game = {
         break;
       case "game_start":
         // NOTE(jordi): hardcoded game_playerid for 2 players
+        console.log("game start!");
         this.player_id = (data.players[0].client_id == this.client_id) ? 0 : 1;
         this.game.onRoomMessage(data);
         break;

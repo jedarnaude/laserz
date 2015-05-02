@@ -501,6 +501,7 @@ function gameCreate(main_scene, socket) {
   // gameState
   //-----------------------------------------
   this.onRoomMessage = function(data) {
+    console.log("Room Message: %j", data)
     switch (data.action) {
       case "game_start":
         // NOTE(jordi): hardcoded game_playerid for 2 players
