@@ -3,27 +3,41 @@ var ENGINE = { };
 ENGINE.Game = {
 
   onServerJoin: function(data) {
-    this.room_data.client_id = data.client_id;
-    this.game.client_id = data.client_id;
-    console.log("Server join: client_id=" + this.room_data.client_id);
+    this.user = data;
+    console.log("server_join");
+    console.dir(data);
   },
 
   onRoomJoin: function(data) {
-    this.in_room = true;
-    this.room_data.room_clients = data.room_clients;
-    this.room_data.room_owner = data.room_owner;
-    console.log("Room join: '" + data.room_data.room_name + ", name='" + data.room_data.client_name + "', client=" + data.room_data.client_id + "', owner=" + data.room_owner);
-    console.log("Room clients: " + data.room_clients.length);
-    this.text.innerHTML = "[" + data.room_data.room_name + "] '" + data.room_data.client_name + "', client=" + data.room_data.client_id + "', owner=" + data.room_owner;
-    if (this.isRoomOwner()) {
-      // hardcode
-      if (data.room_clients.length == 2) {
-        var game_players = [ data.room_clients[0], data.room_clients[1] ];
-        console.log("I am king! shall the game start");
-        this.sendRoomMessage("game_start", true, { seed: Math.floor((Math.random() * 1000000)), players: game_players })
-      }
-    }
+    // TODO(jose): Here goes room configs but not clients
   },
+
+  onRoomClients: function(data) {
+    // TODO(jose): room name and id are known before joining, otherwise its a different protocol
+    // right now its hardcoded.
+    this.room = {name: "test room", id: 1};
+    this.room.users = data.users;
+    this.room.owner = data.owner;
+    console.dir(this.room);
+
+    this.text.innerHTML = 
+      "<p>ROOM: " + this.room.name + " ( " + this.room.id + " )</p>" +
+      "<p>OWNER: " + this.room.owner.name + " ( " + this.room.owner.id + " )</p>";
+    var clients_count = data.users.length;
+    for (var i = 0; i < clients_count; ++i) {
+      this.text.innerHTML += 
+        "<p>CLIENT: " + data.users[i].name + " ( " + data.users[i].id + " )</p>";
+    }
+    // TODO(jose): room owner can start a game rest cannot;
+
+    // if (this.isRoomOwner()) {
+    //   // hardcode
+    //   if (data.room_clients.length == 2) {
+    //     var game_players = [ data.room_clients[0], data.room_clients[1] ];
+    //     console.log("I am king! shall the game start");
+    //     this.sendRoomMessage("game_start", true, { seed: Math.floor((Math.random() * 1000000)), players: game_players })
+    //   }
+  },  
 
   onRoomLeave: function(data) {
     console.log("Room leave: " + data.room_name + ", owner=" + data.room_owner);
@@ -89,13 +103,14 @@ ENGINE.Game = {
     // }
 
     // network
-    this.in_room = false;
-    this.room_data = { client_id: 0, players: [], room_name: 0, room_owner: 0 };
+    this.user = undefined;
+    this.room = undefined;
     this.socket = io.connect('http://localhost:3000');
     this.socket.on('error', function() { console.error(arguments) });
     this.socket.on('message', function() { console.log(arguments) });
     this.socket.on('server_join', this.onServerJoin.bind(this));
     this.socket.on('room_join', this.onRoomJoin.bind(this));
+    this.socket.on('room_clients', this.onRoomClients.bind(this));
     this.socket.on('room_leave', this.onRoomLeave.bind(this));
     this.socket.on('room_message', this.onRoomMessage.bind(this));
 
@@ -143,9 +158,8 @@ ENGINE.Game = {
           console.log("Using input device: " + i);
           this.player_input = i;
           // send room join
-          var room_name = "ROOM_TEST_1";
-          this.socket.emit("room_join", { room_name: room_name, client_name: "Pepekike", client_id: this.room_data.client_id });
-          this.text.innerHTML = "Connecting to room " + room_name;
+          this.socket.emit("room_join", { id: 1 });
+          this.text.innerHTML = "Waiting...";
         }
       }
     }
