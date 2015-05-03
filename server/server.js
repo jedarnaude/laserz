@@ -63,7 +63,7 @@ io.sockets.on('connection', function(socket) {
             io.to(room.id).emit('room_message', action, data);
             break;
         }
-        log().info('user ( ' + socket.user.id + ' ) sent message ( ' + action + ' ) to room ( ' + room.id + ' )');
+        // log().debug('user ( ' + socket.user.id + ' ) sent message ( ' + action + ' ) to room ( ' + room.id + ' )');
     });
 });
 
