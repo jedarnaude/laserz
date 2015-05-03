@@ -49,23 +49,18 @@ io.sockets.on('connection', function(socket) {
     });    
 
     // Game in progress
-    socket.on('room_message', function(data) {
-        var room_name = socket.room_data.room_name;
-        if (data.action == "game_start")
-            log().info("Game Start: %j", data);
-        if (data.broadcast) {
-                if (data.action == "game_start")
-                    log().info("Game Start broadcast: %j", data);
-            io.to(room_name).emit('room_message', data);
+    socket.on('room_message', function(action, data) {
+        var room = socket.room;
+        switch(action) {
+        case 'game_start':
+            io.to(room.id).emit('room_message', action, data);
+            break;
+        case 'game_update':
+            // TODO(jose): Simulate with inputs
+            io.to(room.id).emit('room_message', action, data);
+            break;
         }
-        else {
-            console.log("Send to owner! %j", data);
-            if (owners[room_name]) {
-                owners[room_name].emit('room_message', data);
-            }
-            else
-                log().info("Or not :(!");
-        }
+        log().info('user ( ' + socket.user.id + ' ) sent message ( ' + action + ' ) to room ( ' + room.id + ' )');
     });
 });
 

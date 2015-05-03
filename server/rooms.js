@@ -98,6 +98,10 @@ module.exports = {
 	disconnect: function(io, socket) {
 		log().info('user ( ' + socket.user.id + ' )  left');
 
+		// TODO(jose): socket.room might be undefined this is mainly due to incorrect server reconnection, work to do there.
+		if (socket.room == undefined)
+			return;
+		
 		var room = this.get(socket.room.id);
 		if (room != undefined) {
 			this.leave(io, socket);

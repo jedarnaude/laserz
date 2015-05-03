@@ -1,5 +1,9 @@
 var ENGINE = { };
 
+function newGameStart() {
+  ENGINE.Game.sendRoomMessage("game_start", { seed: Math.floor((Math.random() * 1000000)) });
+}
+
 ENGINE.Game = {
 
   onServerJoin: function(data) {
@@ -28,15 +32,11 @@ ENGINE.Game = {
       this.text.innerHTML += 
         "<p>CLIENT: " + data.users[i].name + " ( " + data.users[i].id + " )</p>";
     }
-    // TODO(jose): room owner can start a game rest cannot;
 
-    // if (this.isRoomOwner()) {
-    //   // hardcode
-    //   if (data.room_clients.length == 2) {
-    //     var game_players = [ data.room_clients[0], data.room_clients[1] ];
-    //     console.log("I am king! shall the game start");
-    //     this.sendRoomMessage("game_start", true, { seed: Math.floor((Math.random() * 1000000)), players: game_players })
-    //   }
+    // NOTE(jose): temporary button to make iterations fast
+    var play_button = document.getElementById("play");
+    play_button.removeEventListener("click", newGameStart);
+    play_button.addEventListener("click", newGameStart);
   },  
 
   onRoomLeave: function(data) {
@@ -44,29 +44,23 @@ ENGINE.Game = {
     this.in_room = false;
   },
 
-  onRoomMessage: function(data) {
-    console.log("OnRoomMessage! %j", data);
-    switch (data.action) {
+  onRoomMessage: function(action, data) {
+    switch (action) {
+      case "game_start":
+        this.game.onRoomMessage(action, data);
+        break;
       case "game_inputs":
         // inputs
         this.player_inputs[data.player_id] = data.inputs;
         break;
-      case "game_start":
-        // NOTE(jordi): hardcoded game_playerid for 2 players
-        console.log("game start!");
-        this.player_id = (data.players[0].client_id == this.client_id) ? 0 : 1;
-        this.game.onRoomMessage(data);
-        break;
       case "game_update":
-        this.game.onRoomMessage(data);
+        this.game.onRoomMessage(action, data);
         break;
     }
   },
   
-  sendRoomMessage: function(action, broadcast, data) {
-    data.action = action;
-    data.broadcast = broadcast;
-    this.socket.emit("room_message", data);
+  sendRoomMessage: function(action, data) {
+    this.socket.emit("room_message", action, data);
   },
 
   isRoomOwner: function() {
@@ -152,7 +146,8 @@ ENGINE.Game = {
     this.inputs[2].update(this.app.gamepads);
     this.inputs[3].update(this.app.gamepads);
 
-    if (!this.in_room) {
+    if (this.room == undefined) {
+      // NOTE(jose): remove this step condition, it should just wait until game starts
       for (var i = 0; i < 4; i++) {
         if (this.inputs[i].buttons_pressed) {
           console.log("Using input device: " + i);
@@ -164,12 +159,7 @@ ENGINE.Game = {
       }
     }
     else {
-      // send inputs to server
-      this.sendRoomMessage("game_inputs", false, { player_id: this.player_id, inputs: this.inputs[this.player_input] })
-      // game
-      if (this.isRoomOwner()) {
-        this.sendRoomMessage("game_update", true, { delta: dt, inputs: this.player_inputs });
-      }
+      this.sendRoomMessage("game_update", true, { delta: dt, inputs: this.player_inputs });
     }
   },
 
