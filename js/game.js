@@ -14,6 +14,7 @@ ENGINE.Game = {
 
   onRoomJoin: function(data) {
     // TODO(jose): Here goes room configs but not clients
+    this.player_input = data.player_index;
   },
 
   onRoomClients: function(data) {
@@ -51,7 +52,7 @@ ENGINE.Game = {
         break;
       case "game_inputs":
         // inputs
-        this.player_inputs[data.player_index] = data;
+        this.player_inputs[data.player_index] = data.inputs;
         break;
       case "game_update":
         this.game.onRoomMessage(action, data);
@@ -148,18 +149,12 @@ ENGINE.Game = {
 
     if (this.room == undefined) {
       // NOTE(jose): remove this step condition, it should just wait until game starts
-      for (var i = 0; i < 4; i++) {
-        if (this.inputs[i].buttons_pressed) {
-          console.log("Using input device: " + i);
-          this.player_input = i;
-          // send room join
-          this.socket.emit("room_join", { id: 1 });
-          this.text.innerHTML = "Waiting...";
-        }
-      }
-    }
-    else {
-      this.sendRoomMessage("game_inputs", this.inputs[this.player_input] );
+      // TODO(jose): player input should decided on room_join not at will.
+      // TODO(jose): decide what type of player input is going to use based on configuration or nice deduction :)
+      this.socket.emit("room_join", { id: 1 });
+      this.text.innerHTML = "Waiting...";
+    } else {
+      this.sendRoomMessage("game_inputs", {player_index:this.player_input, inputs: this.inputs[this.player_input]});
       if (this.isRoomOwner())
         this.sendRoomMessage("game_update", { delta: dt, inputs: this.player_inputs });
     }

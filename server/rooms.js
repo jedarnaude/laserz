@@ -67,6 +67,8 @@ module.exports = {
 		game_rooms[new_room.id] = new_room;
 		
 		socket.join(new_room.id);
+		// TODO(jose): hardcoded 0 location for creator
+		socket.emit('room_join', {player_index: 0});
 
 		log().info('user ( ' + socket.user.id + ' ) creating room ( ' + new_room.id + ' )');
 	},
@@ -75,9 +77,14 @@ module.exports = {
 		log().info('user ( ' + socket.user.id + ' ) joining room ( ' + room.id + ' ) ');
 
 		addClient(room, socket);
+
+		var owner = getRoomOwner(room);
+		var users = getRoomUsers(room);
+		var player_index = users.length - 1;
 		
 		socket.join(room.id);
-		io.to(room.id).emit('room_clients', {owner: getRoomOwner(room), users: getRoomUsers(room)});
+		socket.emit('room_join', {player_index: player_index});
+		io.to(room.id).emit('room_clients', {owner: owner, users: users});
 	},
 
 	leave: function (io, socket) {
@@ -101,7 +108,7 @@ module.exports = {
 		// TODO(jose): socket.room might be undefined this is mainly due to incorrect server reconnection, work to do there.
 		if (socket.room == undefined)
 			return;
-		
+
 		var room = this.get(socket.room.id);
 		if (room != undefined) {
 			this.leave(io, socket);
