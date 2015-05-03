@@ -26,13 +26,16 @@ ENGINE.Game = {
     console.dir(this.room);
 
     this.text.innerHTML = 
+      "<p>PLAYER: " + this.user.id + "</p>" + 
       "<p>ROOM: " + this.room.name + " ( " + this.room.id + " )</p>" +
-      "<p>OWNER: " + this.room.owner.name + " ( " + this.room.owner.id + " )</p>";
+      "<p>OWNER: " + this.room.owner.name + " ( " + this.room.owner.id + " )</p>" +
+      "<p>CLIENTS: ";
     var clients_count = data.users.length;
     for (var i = 0; i < clients_count; ++i) {
       this.text.innerHTML += 
-        "<p>CLIENT: " + data.users[i].name + " ( " + data.users[i].id + " )</p>";
+        "[ " +  data.users[i].name + " ( " + data.users[i].id + " )],";
     }
+    this.text.innerHTML += "</p>";
 
     // NOTE(jose): temporary button to make iterations fast
     var play_button = document.getElementById("play");
@@ -116,7 +119,7 @@ ENGINE.Game = {
     text.style.top = 50 + 'px';
     text.style.left = 50 + 'px';
     text.style.color = 'white';
-    text.style.width = 500;
+    text.style.width = 1000;
     text.style.height = 50;
     document.body.appendChild(text);
     this.text = text;
