@@ -55,6 +55,9 @@ io.sockets.on('connection', function(socket) {
         case 'game_start':
             io.to(room.id).emit('room_message', action, data);
             break;
+        case 'game_inputs':
+            io.to(room.id).emit('room_message', action, data);
+            break;            
         case 'game_update':
             // TODO(jose): Simulate with inputs
             io.to(room.id).emit('room_message', action, data);

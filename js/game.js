@@ -51,7 +51,7 @@ ENGINE.Game = {
         break;
       case "game_inputs":
         // inputs
-        this.player_inputs[data.player_id] = data.inputs;
+        this.player_inputs[data.player_index] = data;
         break;
       case "game_update":
         this.game.onRoomMessage(action, data);
@@ -64,7 +64,7 @@ ENGINE.Game = {
   },
 
   isRoomOwner: function() {
-    return this.room_data.room_owner == this.room_data.client_id;
+    return this.room.owner.id == this.user.id;
   },
 
   create: function() {
@@ -159,7 +159,9 @@ ENGINE.Game = {
       }
     }
     else {
-      this.sendRoomMessage("game_update", true, { delta: dt, inputs: this.player_inputs });
+      this.sendRoomMessage("game_inputs", this.inputs[this.player_input] );
+      if (this.isRoomOwner())
+        this.sendRoomMessage("game_update", { delta: dt, inputs: this.player_inputs });
     }
   },
 
